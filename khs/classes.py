@@ -35,7 +35,6 @@ class KhsDataBase():
             if id is None or str(obj[self._primary_key]) == str(id):
                 self._data.append(obj)
 
-        print(self._data)
         if id is None:
             return self._data
         elif len(self._data) == 1:
