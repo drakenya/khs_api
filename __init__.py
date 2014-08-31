@@ -104,6 +104,9 @@ api.add_resource(Schedule, '/api/raw/schedule/<string:id>')
 class SoundScheduleList(Resource):
     _names = {}
 
+    def __init__(self):
+        self._names = {}
+
     def _get_name(self, id):
         if not id in self._names:
             name = classes.KhsDataNames(app.config['data_path']).get(id)
@@ -129,6 +132,120 @@ class SoundScheduleList(Resource):
         return schedule
 
 api.add_resource(SoundScheduleList, '/api/clean/sound_schedule')
+
+
+class OutgoingScheduleList(Resource):
+    _congregations = {}
+    _outlines = {}
+    _speakers = {}
+
+    def __init__(self):
+        self._congregations = {}
+        self._outlines = {}
+        self._speakers = {}
+
+    def _get_congregation(self, id):
+        if not id in self._congregations:
+            congregation = classes.KhsDataCongregations(app.config['data_path']).get(id)
+            self._congregations[id] = {'name': congregation['congregation']}
+
+        return self._congregations[id]
+
+    def _get_outline(self, id):
+        if not id in self._outlines:
+            outline = classes.KhsDataOutlines(app.config['data_path']).get(id)
+            self._outlines[id] = {'title': outline['title']}
+
+        return self._outlines[id]
+
+    def _get_speaker(self, id):
+        if not id in self._speakers:
+            speaker = classes.KhsDataSpeakers(app.config['data_path']).get(id)
+            self._speakers[id] = {'name': speaker['speaker']}
+
+        return self._speakers[id]
+
+    def get(self):
+        schedule = []
+
+        for s in classes.KhsDataOutgoing(app.config['data_path']).get():
+            date = {'date': s['date']}
+
+            if s['congregation'] is not 0:
+                congregation = self._get_congregation(s['congregation'])
+                date['congregation'] = congregation
+
+            if s['outline'] is not 0:
+                outline = self._get_outline(s['outline'])
+                date['outline'] = outline
+
+            if s['speaker'] is not 0:
+                speaker = self._get_speaker(s['speaker'])
+                date['speaker'] = speaker
+
+            if len(date) > 1:
+                schedule.append(date)
+
+        return schedule
+
+api.add_resource(OutgoingScheduleList, '/api/clean/outgoing_schedule')
+
+
+class IncomingScheduleList(Resource):
+    _congregations = {}
+    _outlines = {}
+    _speakers = {}
+
+    def __init__(self):
+        self._congregations = {}
+        self._outlines = {}
+        self._speakers = {}
+
+    def _get_congregation(self, id):
+        if not id in self._congregations:
+            congregation = classes.KhsDataCongregations(app.config['data_path']).get(id)
+            self._congregations[id] = {'name': congregation['congregation']}
+
+        return self._congregations[id]
+
+    def _get_outline(self, id):
+        if not id in self._outlines:
+            outline = classes.KhsDataOutlines(app.config['data_path']).get(id)
+            self._outlines[id] = {'title': outline['title']}
+
+        return self._outlines[id]
+
+    def _get_speaker(self, id):
+        if not id in self._speakers:
+            speaker = classes.KhsDataSpeakers(app.config['data_path']).get(id)
+            self._speakers[id] = {'name': speaker['speaker']}
+
+        return self._speakers[id]
+
+    def get(self):
+        schedule = []
+
+        for s in classes.KhsDataSchedule(app.config['data_path']).get():
+            date = {'date': s['date']}
+
+            if s['congregation'] is not 0:
+                congregation = self._get_congregation(s['congregation'])
+                date['congregation'] = congregation
+
+            if s['outline'] is not 0:
+                outline = self._get_outline(s['outline'])
+                date['outline'] = outline
+
+            if s['speaker_id'] is not 0:
+                speaker = self._get_speaker(s['speaker_id'])
+                date['speaker'] = speaker
+
+            if len(date) > 1:
+                schedule.append(date)
+
+        return schedule
+
+api.add_resource(IncomingScheduleList, '/api/clean/incoming_schedule')
 
 if __name__ == '__main__':
     app.config['data_path'] = os.path.dirname(os.path.realpath(__file__)) + '/khs/data'
