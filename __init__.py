@@ -36,6 +36,71 @@ api.add_resource(SoundList, '/api/raw/sound')
 api.add_resource(Sound, '/api/raw/sound/<string:id>')
 
 
+class CongregationsList(Resource):
+    def get(self):
+        return classes.KhsDataCongregations(app.config['data_path']).get()
+
+
+class Congregations(Resource):
+    def get(self, id):
+        return classes.KhsDataCongregations(app.config['data_path']).get(id)
+
+api.add_resource(CongregationsList, '/api/raw/congregations')
+api.add_resource(Congregations, '/api/raw/congregations/<string:id>')
+
+
+class SpeakersList(Resource):
+    def get(self):
+        return classes.KhsDataSpeakers(app.config['data_path']).get()
+
+
+class Speakers(Resource):
+    def get(self, id):
+        return classes.KhsDataSpeakers(app.config['data_path']).get(id)
+
+api.add_resource(SpeakersList, '/api/raw/speakers')
+api.add_resource(Speakers, '/api/raw/speakers/<string:id>')
+
+
+class OutgoingList(Resource):
+    def get(self):
+        return classes.KhsDataOutgoing(app.config['data_path']).get()
+
+
+class Outgoing(Resource):
+    def get(self, id):
+        return classes.KhsDataOutgoing(app.config['data_path']).get(id)
+
+api.add_resource(OutgoingList, '/api/raw/outgoing')
+api.add_resource(Outgoing, '/api/raw/outgoing/<string:id>')
+
+
+class OutlinesList(Resource):
+    def get(self):
+        return classes.KhsDataOutlines(app.config['data_path']).get()
+
+
+class Outlines(Resource):
+    def get(self, id):
+        return classes.KhsDataOutlines(app.config['data_path']).get(id)
+
+api.add_resource(OutlinesList, '/api/raw/outlines')
+api.add_resource(Outlines, '/api/raw/outlines/<string:id>')
+
+
+class ScheduleList(Resource):
+    def get(self):
+        return classes.KhsDataSchedule(app.config['data_path']).get()
+
+
+class Schedule(Resource):
+    def get(self, id):
+        return classes.KhsDataSchedule(app.config['data_path']).get(id)
+
+api.add_resource(ScheduleList, '/api/raw/schedule')
+api.add_resource(Schedule, '/api/raw/schedule/<string:id>')
+
+
 class SoundScheduleList(Resource):
     _names = {}
 

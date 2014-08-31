@@ -52,11 +52,42 @@ class KhsDataBibleStudy(KhsDataBase):
         self._file += '/biblestudy.dbf'
 
 
+class KhsDataCongregations(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/congregations.dbf'
+        self._special_fields['phone'] = ['cellphone', 'ecellphone', 'econgphone']
+        self._remap_fields = {'congregati':'congregation'}
+        self._primary_key = 'id'
+
+
 class KhsDataNames(KhsDataBase):
     def __init__(self, directory):
         super().__init__(directory)
         self._file += '/names.dbf'
         self._primary_key = 'id'
+
+
+class KhsDataOutgoing(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/outgoing.dbf'
+        self._remap_fields = {'congregati':'congregation'}
+
+
+class KhsDataOutlines(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/outlines.dbf'
+        self._primary_key = 'outline'
+
+
+class KhsDataSchedule(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/schedule.dbf'
+        self._primary_key = 'id'
+        self._remap_fields = {'congregati':'congregation'}
 
 
 class KhsDataSpeakers(KhsDataBase):
@@ -65,6 +96,7 @@ class KhsDataSpeakers(KhsDataBase):
         self._file += '/speakers.dbf'
         self._special_fields['phone'] = ['ecellphone', 'ephone']
         self._remap_fields = {'congregati':'congregation'}
+        self._primary_key = 'speaker_id'
 
 
 class KhsDataSound(KhsDataBase):
