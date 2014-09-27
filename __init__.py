@@ -1,5 +1,6 @@
 import os
 import json
+from collections import defaultdict
 from khs import classes
 from flask import Flask
 from flask.ext.restful import reqparse, abort, Api, Resource
@@ -99,6 +100,31 @@ class Schedule(Resource):
 
 api.add_resource(ScheduleList, '/api/raw/schedule')
 api.add_resource(Schedule, '/api/raw/schedule/<string:id>')
+
+
+class ServiceMeetingList(Resource):
+    def get(self):
+        return classes.KhsDataServiceMeeting(app.config['data_path']).get()
+
+class ServiceMeeting(Resource):
+    def get(self, id):
+        return classes.KhsDataServiceMeeting(app.config['data_path']).get(id)
+
+api.add_resource(ServiceMeetingList, '/api/raw/servicemeeting')
+api.add_resource(ServiceMeeting, '/api/raw/servicemeeting/<string:id>')
+
+
+class TmsList(Resource):
+    def get(self):
+        return classes.KhsDataTms(app.config['data_path']).get()
+
+
+class Tms(Resource):
+    def get(self, id):
+        return classes.KhsDataTms(app.config['data_path']).get(id)
+
+api.add_resource(TmsList, '/api/raw/tms')
+api.add_resource(Tms, '/api/raw/tms/<string:id>')
 
 
 class SoundScheduleList(Resource):
@@ -246,6 +272,90 @@ class IncomingScheduleList(Resource):
         return schedule
 
 api.add_resource(IncomingScheduleList, '/api/clean/incoming_schedule')
+
+
+class TmsScheduleList(Resource):
+    _names = {}
+
+    def __init__(self):
+        self._names = {}
+
+    def _get_name(self, id):
+        if not id in self._names:
+            name = classes.KhsDataNames(app.config['data_path']).get(id)
+            self._names[id] = {'id': name['id'],
+                               'firstlast': name['firstlast'],
+                               'email': name['email']
+            }
+
+        return self._names[id]
+
+    def get(self):
+        schedule = []
+
+        for s in classes.KhsDataTms(app.config['data_path']).get():
+            tree = lambda: defaultdict(tree)
+            date = defaultdict(tree)
+            date['date'] = s['date']
+            for k in [1, 2, 3]:
+                talk_key = 'talk' + str(k)
+                title_key = talk_key
+                speaker_key = 'talk' + str(k) + '_id'
+                assistant_key = 'assist' + str(k) + '_id'
+
+                if speaker_key in s and s[speaker_key] is not 0:
+                    date[talk_key]['title'] = s[title_key]
+                    date[talk_key]['speaker'] = self._get_name(s[speaker_key])
+
+                if assistant_key in s and s[assistant_key] is not 0:
+                    date[talk_key]['assistant'] = self._get_name(s[assistant_key])
+
+            if len(date) > 1:
+                schedule.append(date)
+
+        return schedule
+
+api.add_resource(TmsScheduleList, '/api/clean/tms_schedule')
+
+
+class ServiceMeetingScheduleList(Resource):
+    _names = {}
+
+    def __init__(self):
+        self._names = {}
+
+    def _get_name(self, id):
+        if not id in self._names:
+            name = classes.KhsDataNames(app.config['data_path']).get(id)
+            self._names[id] = {'id': name['id'],
+                               'firstlast': name['firstlast'],
+                               'email': name['email']
+            }
+
+        return self._names[id]
+
+    def get(self):
+        schedule = []
+
+        for s in classes.KhsDataServiceMeeting(app.config['data_path']).get():
+            tree = lambda: defaultdict(tree)
+            date = defaultdict(tree)
+            date['date'] = s['date']
+            for k in [1, 2, 3, 4]:
+                talk_key = 'talk' + str(k)
+                title_key = 'subject' + str(k)
+                speaker_key = 'name_id_' + str(k)
+
+                if speaker_key in s and s[speaker_key] is not 0:
+                    date[talk_key]['title'] = s[title_key]
+                    date[talk_key]['speaker'] = self._get_name(s[speaker_key])
+
+            if len(date) > 1:
+                schedule.append(date)
+
+        return schedule
+
+api.add_resource(ServiceMeetingScheduleList, '/api/clean/sm_schedule')
 
 if __name__ == '__main__':
     app.config['data_path'] = os.path.dirname(os.path.realpath(__file__)) + '/khs/data'

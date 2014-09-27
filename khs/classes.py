@@ -90,6 +90,13 @@ class KhsDataSchedule(KhsDataBase):
         self._remap_fields = {'congregati':'congregation'}
 
 
+class KhsDataServiceMeeting(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/servicemeeting.dbf'
+        self._primary_key = 'date'
+
+
 class KhsDataSpeakers(KhsDataBase):
     def __init__(self, directory):
         super().__init__(directory)
@@ -106,6 +113,13 @@ class KhsDataSound(KhsDataBase):
         self._primary_key = 'date'
 
 
+class KhsDataTms(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/tms.dbf'
+        self._primary_key = 'date'
+
+
 class KhsDataUser(KhsDataBase):
     def __init__(self, directory):
         super().__init__(directory)
@@ -116,5 +130,5 @@ if __name__ == '__main__':
     # print(KhsDataBibleStudy('data').serialize())
     # print(KhsDataNames('data').serialize())
     # print(KhsDataSpeakers('data').serialize())
-    print(json.dumps(KhsDataSound('data').get(), sort_keys=True, indent=2, separators=(',', ': ')))
+    print(json.dumps(KhsDataServiceMeeting('data').get(), sort_keys=True, indent=2, separators=(',', ': ')))
     # print(KhsDataUser('data').serialize())
