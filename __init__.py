@@ -249,4 +249,4 @@ api.add_resource(IncomingScheduleList, '/api/clean/incoming_schedule')
 
 if __name__ == '__main__':
     app.config['data_path'] = os.path.dirname(os.path.realpath(__file__)) + '/khs/data'
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
