@@ -180,14 +180,24 @@ class OutgoingScheduleList(Resource):
     def _get_outline(self, id):
         if not id in self._outlines:
             outline = classes.KhsDataOutlines(app.config['data_path']).get(id)
-            self._outlines[id] = {'title': outline['title']}
+            self._outlines[id] = {'title': outline['title'], 'id': outline['outline']}
 
         return self._outlines[id]
 
     def _get_speaker(self, id):
         if not id in self._speakers:
             speaker = classes.KhsDataSpeakers(app.config['data_path']).get(id)
-            self._speakers[id] = {'name': speaker['speaker']}
+            speaker_ids = {
+                'Andrew Kroll': 27,
+                'Marty Kroll': 2,
+                'Ronald Brooks Jr.': 1,
+                'Matthew Burns': 15,
+                'Michael Smith': 49,
+                'Edward Tchissi': 13,
+                'Brady Kroll': 28,
+                'Anthony Pasquini': 40
+            }
+            self._speakers[id] = {'name': speaker['speaker'], 'id': speaker_ids[speaker['speaker']]}
 
         return self._speakers[id]
 
