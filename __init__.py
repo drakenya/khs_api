@@ -297,6 +297,13 @@ class TmsScheduleList(Resource):
             tree = lambda: defaultdict(tree)
             date = defaultdict(tree)
             date['date'] = s['date']
+
+            # bh
+            if 'bh_id' in s and s['bh_id'] is not 0:
+                date['bh']['title'] = s['bh']
+                date['bh']['speaker'] = self._get_name(s['bh_id'])
+
+            # ms1, ms2, ms3
             for k in [1, 2, 3]:
                 talk_key = 'talk' + str(k)
                 title_key = talk_key
