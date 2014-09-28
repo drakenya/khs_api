@@ -231,11 +231,13 @@ class IncomingScheduleList(Resource):
     _congregations = {}
     _outlines = {}
     _speakers = {}
+    _names = {}
 
     def __init__(self):
         self._congregations = {}
         self._outlines = {}
         self._speakers = {}
+        self._names = {}
 
     def _get_congregation(self, id):
         if not id in self._congregations:
@@ -258,6 +260,16 @@ class IncomingScheduleList(Resource):
 
         return self._speakers[id]
 
+    def _get_name(self, id):
+        if not id in self._names:
+            name = classes.KhsDataNames(app.config['data_path']).get(id)
+            self._names[id] = {'id': name['id'],
+                               'firstlast': name['firstlast'],
+                               'email': name['email']
+            }
+
+        return self._names[id]
+
     def get(self):
         schedule = []
 
@@ -275,6 +287,16 @@ class IncomingScheduleList(Resource):
             if s['speaker_id'] is not 0:
                 speaker = self._get_speaker(s['speaker_id'])
                 date['speaker'] = speaker
+
+            if s['chairman'] is not 0:
+                print(s['chairman'])
+                chairman = self._get_name(s['chairman'])
+                date['chairman'] = chairman
+
+            if s['reader'] is not 0:
+                print(s['reader'])
+                reader = self._get_name(s['reader'])
+                date['reader'] = reader
 
             if len(date) > 1:
                 schedule.append(date)
