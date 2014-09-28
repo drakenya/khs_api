@@ -148,7 +148,7 @@ class SoundScheduleList(Resource):
 
         for s in classes.KhsDataSound(app.config['data_path']).get():
             date = {'date': s['date']}
-            for k in ['sound', 'mic1', 'mic2', 'mic3', 'mic4', 'stage']:
+            for k in ['sound', 'mic1', 'mic2', 'mic3', 'mic4', 'stage', 'attendant1', 'attendant2', 'attendant3']:
                 if s[k] is not 0:
                     date[k] = self._get_name(s[k])
 
