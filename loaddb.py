@@ -8,6 +8,7 @@ from app.sound.models import Sound
 from app.congregations.models import Congregation
 from app.outlines.models import Outline
 from app.speakers.models import Speaker
+from app.outgoing.models import Outgoing
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -15,6 +16,7 @@ from app.sound.khs import KhsDataSound
 from app.congregations.khs import KhsDataCongregations
 from app.outlines.khs import KhsDataOutlines
 from app.speakers.khs import KhsDataSpeakers
+from app.outgoing.khs import KhsDataOutgoing
 
 app.config.from_object(config_path)
 
@@ -97,5 +99,23 @@ for speaker in speakers:
     )
 
     db.session.add(new_speaker)
+
+# load outgoing (schedule)
+outgoing = KhsDataOutgoing(app.config['KHS_DATA_PATH']).get()
+for day in outgoing:
+    new_outgoing = Outgoing(
+        date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+        outline_id=day['outline'] if day['outline'] else None,
+        speaker_id=day['speaker'] if day['speaker'] else None,
+        congregation_id=day['congregation'] if day['congregation'] else None
+    )
+
+    valid = False
+    for key in ['congregation', 'outline', 'speaker']:
+        if day[key]:
+            valid = True
+
+    if valid:
+        db.session.add(new_outgoing)
 
 db.session.commit()
