@@ -18,6 +18,10 @@ class SoundView(FlaskView):
     def get(self, date):
         return Response(dumps(Sound.query.filter_by(date=date).first(), cls=AlchemyEncoder, indent=2), mimetype='application/json')
 
+    @route('/schedule/')
+    def schedule(self):
+        return Response(dumps(Sound.query.all(), cls=AlchemyEncoder, indent=2), mimetype='application/json')
+
     @route('/khs/')
     def khs_index(self):
         results = KhsDataSound(app.config['KHS_DATA_PATH']).get()

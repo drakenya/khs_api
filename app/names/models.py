@@ -1,5 +1,4 @@
 from app import db
-from json import dumps
 
 class Name(db.Model):
     __tablename__ = 'names'
@@ -11,7 +10,7 @@ class Name(db.Model):
 
     fsgroup_id = db.Column(db.Integer, db.ForeignKey('fsgroups.id'))
 
-    # fsgroup_id: <int>
+    fsgroup = db.relationship('Fsgroup')
 
     def __init__(self, first_name, last_name, email, id=None, fsgroup_id=None):
         if id:

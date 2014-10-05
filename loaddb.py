@@ -2,7 +2,7 @@ from app import app, db
 from config import config_path
 import datetime
 
-from app.fsgroups.models import  Fsgroup
+from app.fsgroups.models import Fsgroup
 from app.names.models import Name
 from app.sound.models import Sound
 

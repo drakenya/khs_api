@@ -1,5 +1,4 @@
 from app import db
-from json import dumps
 
 class Sound(db.Model):
     __tablename__ = 'sound'
@@ -12,7 +11,12 @@ class Sound(db.Model):
     mic2_id = db.Column(db.Integer, db.ForeignKey('names.id'))
     stage_id = db.Column(db.Integer, db.ForeignKey('names.id'))
 
-    # fsgroup_id: <int>
+    attendant = db.relationship('Name', foreign_keys='Sound.attendant1_id')
+    console = db.relationship('Name', foreign_keys='Sound.console_id')
+    mic1 = db.relationship('Name', foreign_keys='Sound.mic1_id')
+    mic2 = db.relationship('Name', foreign_keys='Sound.mic2_id')
+    stage = db.relationship('Name', foreign_keys='Sound.stage_id')
+
 
     def __init__(self, date=None, attendant1_id=None, mic1_id=None, mic2_id=None, console_id=None, stage_id=None):
         self.date = date

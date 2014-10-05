@@ -1,5 +1,4 @@
 from app import db
-from json import dumps
 
 class Fsgroup(db.Model):
     __tablename__ = 'fsgroups'
@@ -9,13 +8,10 @@ class Fsgroup(db.Model):
     address = db.Column(db.String(128))
     overseer = db.Column(db.String(128))
 
-    names = db.relationship("Name")
-
-    # fsgroup_id: <int>
+    names = db.relationship('Name')
 
     def __init__(self, name, address, overseer, id=None):
-        if id:
-            self.id = id
+        self.id = id
 
         self.name = name
         self.address = address

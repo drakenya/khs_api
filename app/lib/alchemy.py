@@ -1,6 +1,7 @@
-from json import dumps, JSONEncoder
+from json import dumps, JSONEncoder, loads
 from datetime import date
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from app.names.models import Name
 
 
 class AlchemyEncoder(JSONEncoder):
@@ -13,6 +14,9 @@ class AlchemyEncoder(JSONEncoder):
 
                 if isinstance(data, date):
                     data = str(data)
+
+                if isinstance(data, Name):
+                    data = loads(dumps(data, cls=AlchemyEncoder))
 
                 try:
                     dumps(data) # this will fail on non-encodable values, like other classes
