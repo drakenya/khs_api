@@ -20,11 +20,3 @@ class Outgoing(db.Model):
         self.outline_id = outline_id
         self.speaker_id = speaker_id
         self.congregation_id = congregation_id
-
-    def __iter__(self):
-        return {
-            'date': self.date,
-            'outline_id': self.outline_id,
-            'speaker_id': self.speaker_id,
-            'congregation_id': self.congregation_id
-        }.iteritems()

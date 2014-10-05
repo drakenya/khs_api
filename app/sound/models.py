@@ -25,13 +25,3 @@ class Sound(db.Model):
         self.mic2_id = mic2_id
         self.console_id = console_id
         self.stage_id = stage_id
-
-    def __iter__(self):
-        return {
-            'date': self.date,
-            'attendant1_id': self.attendant1_id,
-            'console_id': self.console_id,
-            'mic1_id': self.mic1_id,
-            'mic2_id': self.mic2_id,
-            'stage_id': self.stage_id
-        }.iteritems()

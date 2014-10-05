@@ -22,12 +22,3 @@ class Name(db.Model):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-
-    def __iter__(self):
-        return {
-            'id': self.id,
-            'fsgroup_id': self.fsgroup_id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email
-        }.iteritems()

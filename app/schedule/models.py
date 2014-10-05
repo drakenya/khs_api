@@ -28,14 +28,3 @@ class Schedule(db.Model):
         self.congregation_id = congregation_id
         self.chairman_id = chairman_id
         self.reader_id = reader_id
-
-    def __iter__(self):
-        return {
-            'id': self.id,
-            'date': self.date,
-            'outline_id': self.outline_id,
-            'speaker_id': self.speaker_id,
-            'congregation_id': self.congregation_id,
-            'chairman_id': self.chairman_id,
-            'reader_id': self.reader_id
-        }.iteritems()

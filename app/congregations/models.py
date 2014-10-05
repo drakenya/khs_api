@@ -11,9 +11,3 @@ class Congregation(db.Model):
         self.id = id
 
         self.name = name
-
-    def __iter__(self):
-        return {
-            'id': self.id,
-            'name': self.name
-        }.iteritems()

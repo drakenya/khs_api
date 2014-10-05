@@ -16,11 +16,3 @@ class Fsgroup(db.Model):
         self.name = name
         self.address = address
         self.overseer = overseer
-
-    def __iter__(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'address': self.address,
-            'overseer': self.overseer
-        }.iteritems()
