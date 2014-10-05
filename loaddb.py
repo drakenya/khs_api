@@ -9,6 +9,7 @@ from app.congregations.models import Congregation
 from app.outlines.models import Outline
 from app.speakers.models import Speaker
 from app.outgoing.models import Outgoing
+from app.schedule.models import Schedule
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -17,6 +18,7 @@ from app.congregations.khs import KhsDataCongregations
 from app.outlines.khs import KhsDataOutlines
 from app.speakers.khs import KhsDataSpeakers
 from app.outgoing.khs import KhsDataOutgoing
+from app.schedule.khs import KhsDataSchedule
 
 app.config.from_object(config_path)
 
@@ -117,5 +119,25 @@ for day in outgoing:
 
     if valid:
         db.session.add(new_outgoing)
+
+# load schedule (schedule)
+schedule = KhsDataSchedule(app.config['KHS_DATA_PATH']).get()
+for day in schedule:
+    new_schedule = Schedule(
+        date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+        outline_id=day['outline'] if day['outline'] else None,
+        speaker_id=day['speaker_id'] if day['speaker_id'] else None,
+        congregation_id=day['congregation'] if day['congregation'] else None,
+        chairman_id=day['chairman'] if day['chairman'] else None,
+        reader_id=day['reader'] if day['reader'] else None
+    )
+
+    valid = False
+    for key in ['congregation', 'outline', 'speaker_id', 'chairman', 'reader']:
+        if day[key]:
+            valid = True
+
+    if valid:
+        db.session.add(new_schedule)
 
 db.session.commit()

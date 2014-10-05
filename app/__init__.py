@@ -14,3 +14,4 @@ from app.congregations import views as _
 from app.outlines import views as _
 from app.speakers import views as _
 from app.outgoing import views as _
+from app.schedule import views as _
