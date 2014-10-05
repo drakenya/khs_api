@@ -11,3 +11,4 @@ from app.names import views as _
 from app.sound import views as _
 
 from app.congregations import views as _
+from app.outlines import views as _

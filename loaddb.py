@@ -6,11 +6,13 @@ from app.fsgroups.models import Fsgroup
 from app.names.models import Name
 from app.sound.models import Sound
 from app.congregations.models import Congregation
+from app.outlines.models import Outline
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
 from app.sound.khs import KhsDataSound
 from app.congregations.khs import KhsDataCongregations
+from app.outlines.khs import KhsDataOutlines
 
 app.config.from_object(config_path)
 
@@ -72,5 +74,15 @@ for congregation in congregations:
     )
 
     db.session.add(new_congregation)
+
+# load outlines
+outlines = KhsDataOutlines(app.config['KHS_DATA_PATH']).get()
+for outline in outlines:
+    new_outline = Outline(
+        id=outline['outline'],
+        name=outline['title'],
+    )
+
+    db.session.add(new_outline)
 
 db.session.commit()
