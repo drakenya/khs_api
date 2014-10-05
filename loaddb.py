@@ -100,6 +100,11 @@ for speaker in speakers:
         last_name=speaker['lastname'],
     )
 
+    name = Name.query.filter_by(first_name=new_speaker.first_name, last_name=new_speaker.last_name).first()
+
+    if name:
+        new_speaker.name = name
+
     db.session.add(new_speaker)
 
 # load outgoing (schedule)
