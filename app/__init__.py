@@ -9,3 +9,5 @@ db = SQLAlchemy(app)
 from app.fsgroups import views as _
 from app.names import views as _
 from app.sound import views as _
+
+from app.congregations import views as _

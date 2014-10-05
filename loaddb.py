@@ -5,10 +5,12 @@ import datetime
 from app.fsgroups.models import Fsgroup
 from app.names.models import Name
 from app.sound.models import Sound
+from app.congregations.models import Congregation
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
 from app.sound.khs import KhsDataSound
+from app.congregations.khs import KhsDataCongregations
 
 app.config.from_object(config_path)
 
@@ -60,5 +62,15 @@ for day in sound:
 
     if valid:
         db.session.add(new_day)
+
+# load congregations
+congregations = KhsDataCongregations(app.config['KHS_DATA_PATH']).get()
+for congregation in congregations:
+    new_congregation = Congregation(
+        id=congregation['id'],
+        name=congregation['congregation'],
+    )
+
+    db.session.add(new_congregation)
 
 db.session.commit()
