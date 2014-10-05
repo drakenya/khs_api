@@ -1,11 +1,14 @@
 from app import app, db
 from config import config_path
+import datetime
 
 from app.fsgroups.models import  Fsgroup
 from app.names.models import Name
+from app.sound.models import Sound
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
+from app.sound.khs import KhsDataSound
 
 app.config.from_object(config_path)
 
@@ -24,7 +27,6 @@ for fsgroup in fsgroups:
     )
 
     db.session.add(new_fsgroup)
-    db.session.commit()
 
 # load names
 names = KhsDataNames(app.config['KHS_DATA_PATH']).get()
@@ -38,4 +40,19 @@ for name in names:
     )
 
     db.session.add(new_name)
-    db.session.commit()
+
+# load sound (schedule)
+sound = KhsDataSound(app.config['KHS_DATA_PATH']).get()
+for day in sound:
+    new_day = Sound(
+        date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+        attendant1_id=day['attendant1'] if day['attendant1'] else None,
+        console_id=day['sound'] if day['sound'] else None,
+        mic1_id=day['mic1'] if day['mic1'] else None,
+        mic2_id=day['mic2'] if day['mic2'] else None,
+        stage_id=day['stage'] if day['stage'] else None,
+    )
+
+    db.session.add(new_day)
+
+db.session.commit()

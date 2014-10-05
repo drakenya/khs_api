@@ -2,7 +2,7 @@ from app import db
 from json import dumps
 
 class Name(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'names'
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64))
