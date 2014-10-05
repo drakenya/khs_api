@@ -1,6 +1,6 @@
 from config.base import *
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:////' + basedir + '/../../data/db.sqlite'
-KHS_DATA_PATH = '/home/drakenya/development/khs-api/public_html/khs/data'
+KHS_DATA_PATH = basedir + '/../../khs_data'
 
 DEBUG = True
