@@ -6,14 +6,17 @@ from app import app, api, db
 from app.names.models import Name
 from app.names.khs import KhsDataNames
 
+from app.lib.alchemy import AlchemyEncoder
+
 
 class NamesView(FlaskView):
     @route('/')
     def index(self):
-        # db.create_all()
-        return app.config['SQLALCHEMY_DATABASE_URI']
-        # args = parser.parse_args()
-        # return {'args': args}
+        return Response(dumps(Name.query.all(), cls=AlchemyEncoder, indent=2), mimetype='application/json')
+
+    @route('/<int:id>/')
+    def get(self, id):
+        return Response(dumps(Name.query.filter_by(id=id).first(), cls=AlchemyEncoder, indent=2), mimetype='application/json')
 
     @route('/khs/')
     def khs_index(self):
