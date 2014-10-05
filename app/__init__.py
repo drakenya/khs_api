@@ -12,3 +12,4 @@ from app.sound import views as _
 
 from app.congregations import views as _
 from app.outlines import views as _
+from app.speakers import views as _

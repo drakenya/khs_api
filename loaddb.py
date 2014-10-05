@@ -7,12 +7,14 @@ from app.names.models import Name
 from app.sound.models import Sound
 from app.congregations.models import Congregation
 from app.outlines.models import Outline
+from app.speakers.models import Speaker
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
 from app.sound.khs import KhsDataSound
 from app.congregations.khs import KhsDataCongregations
 from app.outlines.khs import KhsDataOutlines
+from app.speakers.khs import KhsDataSpeakers
 
 app.config.from_object(config_path)
 
@@ -84,5 +86,16 @@ for outline in outlines:
     )
 
     db.session.add(new_outline)
+
+# load speakers
+speakers = KhsDataSpeakers(app.config['KHS_DATA_PATH']).get()
+for speaker in speakers:
+    new_speaker = Speaker(
+        id=speaker['speaker_id'],
+        first_name=speaker['firstname'],
+        last_name=speaker['lastname'],
+    )
+
+    db.session.add(new_speaker)
 
 db.session.commit()
