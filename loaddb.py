@@ -53,6 +53,12 @@ for day in sound:
         stage_id=day['stage'] if day['stage'] else None,
     )
 
-    db.session.add(new_day)
+    valid = False
+    for key in ['attendant1', 'sound', 'mic1', 'mic2', 'stage']:
+        if day[key]:
+            valid = True
+
+    if valid:
+        db.session.add(new_day)
 
 db.session.commit()
