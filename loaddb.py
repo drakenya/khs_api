@@ -12,6 +12,7 @@ from app.outgoing.models import Outgoing
 from app.schedule.models import Schedule
 from app.tms.models import Tms
 from app.servicemeeting.models import ServiceMeeting
+from app.biblestudy.models import BibleStudy
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -23,6 +24,7 @@ from app.outgoing.khs import KhsDataOutgoing
 from app.schedule.khs import KhsDataSchedule
 from app.tms.khs import KhsDataTms
 from app.servicemeeting.khs import KhsDataServiceMeeting
+from app.biblestudy.khs import KhsDataBibleStudy
 
 app.config.from_object(config_path)
 
@@ -191,6 +193,24 @@ for day in schedule:
 
     valid = False
     for key in ['name_id_1', 'name_id_2', 'name_id_3', 'name_id_4']:
+        if day[key]:
+            valid = True
+
+    if valid:
+        db.session.add(new_schedule)
+
+# load biblestudy (schedule)
+schedule = KhsDataBibleStudy(app.config['KHS_DATA_PATH']).get()
+for day in schedule:
+    new_schedule = BibleStudy(
+        date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+        conductor_id=day['conductor'] if day['conductor'] else None,
+        reader_id=day['reader'] if day['reader'] else None,
+        title=day['material'] if day['material'] else None
+    )
+
+    valid = False
+    for key in ['conductor', 'reader']:
         if day[key]:
             valid = True
 
