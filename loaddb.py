@@ -11,6 +11,7 @@ from app.speakers.models import Speaker
 from app.outgoing.models import Outgoing
 from app.schedule.models import Schedule
 from app.tms.models import Tms
+from app.servicemeeting.models import ServiceMeeting
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -21,6 +22,7 @@ from app.speakers.khs import KhsDataSpeakers
 from app.outgoing.khs import KhsDataOutgoing
 from app.schedule.khs import KhsDataSchedule
 from app.tms.khs import KhsDataTms
+from app.servicemeeting.khs import KhsDataServiceMeeting
 
 app.config.from_object(config_path)
 
@@ -166,6 +168,29 @@ for day in schedule:
 
     valid = False
     for key in ['bh_id', 'talk1_id', 'talk2_id', 'talk3_id']:
+        if day[key]:
+            valid = True
+
+    if valid:
+        db.session.add(new_schedule)
+
+# load servicemeeting (schedule)
+schedule = KhsDataServiceMeeting(app.config['KHS_DATA_PATH']).get()
+for day in schedule:
+    new_schedule = ServiceMeeting(
+        date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+        talk_1_id=day['name_id_1'] if day['name_id_1'] else None,
+        talk_2_id=day['name_id_2'] if day['name_id_2'] else None,
+        talk_3_id=day['name_id_3'] if day['name_id_3'] else None,
+        talk_4_id=day['name_id_4'] if day['name_id_4'] else None,
+        talk_1_title=day['subject1'] if day['subject1'] else None,
+        talk_2_title=day['subject2'] if day['subject2'] else None,
+        talk_3_title=day['subject3'] if day['subject3'] else None,
+        talk_4_title=day['subject4'] if day['subject4'] else None
+    )
+
+    valid = False
+    for key in ['name_id_1', 'name_id_2', 'name_id_3', 'name_id_4']:
         if day[key]:
             valid = True
 
