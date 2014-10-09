@@ -10,6 +10,7 @@ from app.outlines.models import Outline
 from app.speakers.models import Speaker
 from app.outgoing.models import Outgoing
 from app.schedule.models import Schedule
+from app.tms.models import Tms
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -19,6 +20,7 @@ from app.outlines.khs import KhsDataOutlines
 from app.speakers.khs import KhsDataSpeakers
 from app.outgoing.khs import KhsDataOutgoing
 from app.schedule.khs import KhsDataSchedule
+from app.tms.khs import KhsDataTms
 
 app.config.from_object(config_path)
 
@@ -139,6 +141,31 @@ for day in schedule:
 
     valid = False
     for key in ['congregation', 'outline', 'speaker_id', 'chairman', 'reader']:
+        if day[key]:
+            valid = True
+
+    if valid:
+        db.session.add(new_schedule)
+
+# load tms (schedule)
+schedule = KhsDataTms(app.config['KHS_DATA_PATH']).get()
+for day in schedule:
+    new_schedule = Tms(
+        date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+        bh_id=day['bh_id'] if day['bh_id'] else None,
+        talk_1_id=day['talk1_id'] if day['talk1_id'] else None,
+        talk_2_id=day['talk2_id'] if day['talk2_id'] else None,
+        talk_3_id=day['talk3_id'] if day['talk3_id'] else None,
+        talk_2_assistant_id=day['assist2_id'] if day['assist2_id'] else None,
+        talk_3_assistant_id=day['assist3_id'] if day['assist3_id'] else None,
+        bh_title=day['bh'] if day['bh'] else None,
+        talk_1_title=day['talk1'] if day['talk1'] else None,
+        talk_2_title=day['talk2'] if day['talk2'] else None,
+        talk_3_title=day['talk3'] if day['talk3'] else None
+    )
+
+    valid = False
+    for key in ['bh_id', 'talk1_id', 'talk2_id', 'talk3_id']:
         if day[key]:
             valid = True
 

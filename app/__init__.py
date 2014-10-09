@@ -15,3 +15,5 @@ from app.outlines import views as _
 from app.speakers import views as _
 from app.outgoing import views as _
 from app.schedule import views as _
+
+from app.tms import views as _
