@@ -13,6 +13,7 @@ from app.schedule.models import Schedule
 from app.tms.models import Tms
 from app.servicemeeting.models import ServiceMeeting
 from app.biblestudy.models import BibleStudy
+from app.weekly.models import Weekly
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -216,5 +217,31 @@ for day in schedule:
 
     if valid:
         db.session.add(new_schedule)
+
+# load weekly (meta-schedule)
+meetings = BibleStudy.query.all()
+for meeting in meetings:
+    new_weekly = Weekly(date=meeting.date)
+    new_weekly.bible_study = meeting
+
+    db.session.add(new_weekly)
+
+meetings = Tms.query.all()
+for meeting in meetings:
+    weekly = Weekly.query.filter_by(date=meeting.date).first()
+    if not weekly:
+        weekly = Weekly(date=meeting.date)
+        db.session.add(weekly)
+
+    weekly.tms = meeting
+
+meetings = ServiceMeeting.query.all()
+for meeting in meetings:
+    weekly = Weekly.query.filter_by(date=meeting.date).first()
+    if not weekly:
+        weekly = Weekly(date=meeting.date)
+        db.session.add(weekly)
+
+    weekly.service_meeting = meeting
 
 db.session.commit()

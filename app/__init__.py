@@ -19,3 +19,5 @@ from app.schedule import views as _
 from app.tms import views as _
 from app.servicemeeting import views as _
 from app.biblestudy import views as _
+
+from app.weekly import views as _

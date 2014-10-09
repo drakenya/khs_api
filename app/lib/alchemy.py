@@ -6,6 +6,9 @@ from app.names.models import Name
 from app.speakers.models import Speaker
 from app.congregations.models import Congregation
 from app.outlines.models import Outline
+from app.biblestudy.models import BibleStudy
+from app.tms.models import Tms
+from app.servicemeeting.models import ServiceMeeting
 
 
 class AlchemyEncoder(JSONEncoder):
@@ -22,7 +25,10 @@ class AlchemyEncoder(JSONEncoder):
                 if isinstance(data, Name)\
                         or isinstance(data, Speaker)\
                         or isinstance(data, Congregation)\
-                        or isinstance(data, Outline):
+                        or isinstance(data, Outline)\
+                        or isinstance(data, BibleStudy)\
+                        or isinstance(data, Tms)\
+                        or isinstance(data, ServiceMeeting):
                     data = loads(dumps(data, cls=AlchemyEncoder))
 
                 try:
