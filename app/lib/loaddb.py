@@ -143,7 +143,8 @@ class LoadDb():
                 speaker_id=day['speaker_id'] if day['speaker_id'] else None,
                 congregation_id=day['congregation'] if day['congregation'] else None,
                 chairman_id=day['chairman'] if day['chairman'] else None,
-                reader_id=day['reader'] if day['reader'] else None
+                reader_id=day['reader'] if day['reader'] else None,
+                host_id=day['host'] if day['host'] else None,
             )
 
             valid = False
