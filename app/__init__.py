@@ -21,3 +21,5 @@ from app.servicemeeting import views as _
 from app.biblestudy import views as _
 
 from app.weekly import views as _
+
+from app.update import views as _
