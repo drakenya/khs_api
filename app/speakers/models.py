@@ -7,6 +7,7 @@ class Speaker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
+    full_name = db.Column(db.String(128))
     name_id = db.Column(db.Integer, db.ForeignKey('names.id'))
 
     name = db.relationship('Name')
@@ -16,4 +17,5 @@ class Speaker(db.Model):
 
         self.first_name = first_name
         self.last_name = last_name
+        self.full_name = first_name + ' ' + last_name
         self.name_id = name_id

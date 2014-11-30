@@ -55,7 +55,6 @@ class LoadDb():
                 fsgroup_id=name['fsgroup_id'],
                 first_name=name['firstname'],
                 last_name=name['lastname'],
-                full_name=name['firstlast'],
                 email=name['email']
             )
 
