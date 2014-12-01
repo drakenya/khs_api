@@ -169,8 +169,13 @@ class LoadDb():
                 bh_title=day['bh'] if day['bh'] else None,
                 talk_1_title=day['talk1'] if day['talk1'] else None,
                 talk_2_title=day['talk2'] if day['talk2'] else None,
-                talk_3_title=day['talk3'] if day['talk3'] else None
+                talk_3_title=day['talk3'] if day['talk3'] else None,
+                review_reader_id = None,
             )
+
+            if day['review']:
+                new_schedule.review_reader_id = new_schedule.talk_1_id
+                new_schedule.talk_1_id = None
 
             valid = False
             for key in ['bh_id', 'talk1_id', 'talk2_id', 'talk3_id']:
