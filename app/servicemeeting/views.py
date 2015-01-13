@@ -16,7 +16,7 @@ class ServiceMeetingView(FlaskView):
 
     @route('/<string:id>/')
     def get(self, id):
-        return Response(dumps(ServiceMeeting.query.filter_by(id=id).first(), cls=AlchemyEncoder, indent=2), mimetype='application/json')
+        return Response(dumps(ServiceMeeting.query.filter_by(date=id).first(), cls=AlchemyEncoder, indent=2), mimetype='application/json')
 
     @route('/khs/')
     def khs_index(self):

@@ -19,7 +19,7 @@ class ServiceMeeting(db.Model):
     talk_1 = db.relationship('Name', foreign_keys='ServiceMeeting.talk_1_id')
     talk_2 = db.relationship('Name', foreign_keys='ServiceMeeting.talk_2_id')
     talk_3 = db.relationship('Name', foreign_keys='ServiceMeeting.talk_3_id')
-    talk_3 = db.relationship('Name', foreign_keys='ServiceMeeting.talk_4_id')
+    talk_4 = db.relationship('Name', foreign_keys='ServiceMeeting.talk_4_id')
 
     def __init__(self, date, talk_1_id, talk_2_id, talk_3_id, talk_4_id, talk_1_title, talk_2_title, talk_3_title, talk_4_title):
         self.date = date
