@@ -125,10 +125,17 @@ class KhsDataUser(KhsDataBase):
         super().__init__(directory)
         self._file += '/user.dbf'
 
+class KhsOCLM(KhsDataBase):
+    def __init__(self, directory):
+        super().__init__(directory)
+        self._file += '/oclm.dbf'
+        self._primary_key = 'date'
+
 
 if __name__ == '__main__':
     # print(KhsDataBibleStudy('data').serialize())
     # print(KhsDataNames('data').serialize())
     # print(KhsDataSpeakers('data').serialize())
-    print(json.dumps(KhsDataServiceMeeting('data').get(), sort_keys=True, indent=2, separators=(',', ': ')))
+    # print(KhsDataServiceMeeting('data')._file)
+    print(json.dumps(KhsOCLM('khs_data').get(), sort_keys=True, indent=2, separators=(',', ': ')))
     # print(KhsDataUser('data').serialize())

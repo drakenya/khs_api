@@ -14,6 +14,7 @@ from app.tms.models import Tms
 from app.servicemeeting.models import ServiceMeeting
 from app.biblestudy.models import BibleStudy
 from app.weekly.models import Weekly
+from app.oclm.models import OCLM
 
 from app.fsgroups.khs import KhsDataFsgroups
 from app.names.khs import KhsDataNames
@@ -26,6 +27,7 @@ from app.schedule.khs import KhsDataSchedule
 from app.tms.khs import KhsDataTms
 from app.servicemeeting.khs import KhsDataServiceMeeting
 from app.biblestudy.khs import KhsDataBibleStudy
+from app.oclm.khs import KhsDataOCLM
 
 
 class LoadDb():
@@ -251,5 +253,41 @@ class LoadDb():
                 db.session.add(weekly)
 
             weekly.service_meeting = meeting
+
+        # load OCLM (schedule)
+        schedule = KhsDataOCLM(app.config['KHS_DATA_PATH']).get()
+        for day in schedule:
+            new_schedule = OCLM(
+                date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
+                bible_reading_id=day['br1'] if day['br1'] else None,
+                bible_reading_title=day['br'] if day['br'] else None,
+                initial_call_id=day['ic1'] if day['ic1'] else None,
+                initial_call_assistant_id=day['ic_asst1'] if day['ic_asst1'] else None,
+                return_visit_id=day['rv1'] if day['rv1'] else None,
+                return_visit_assistant_id=day['rv_asst1'] if day['rv_asst1'] else None,
+                bible_study_id=day['bs1'] if day['bs1'] else None,
+                bible_study_assistant_id=day['bs_asst1'] if day['bs_asst1'] else None,
+                cbs_title=day['cbs'] if day['cbs'] else None,
+                cbs_conductor_id=day['cbs_conduc'] if day['cbs_conduc'] else None,
+                cbs_reader_id=day['cbs_reader'] if day['cbs_reader'] else None,
+                chairman_id=day['chairman'] if day['chairman'] else None,
+                prayer_1_id=day['prayer1'] if day['prayer1'] else None,
+                talk_title=day['talk'] if day['talk'] else None,
+                living_as_christians_1_title=day['subject1'] if day['subject1'] else None,
+                living_as_christians_2_title=day['subject2'] if day['subject2'] else None,
+                digging_for_gems_id=day['gems'] if day['gems'] else None,
+                prepare_presentations_id=day['prepare_id'] if day['prepare_id'] else None,
+                talk_id=day['talk_id'] if day['talk_id'] else None,
+                living_as_christians_1_id=day['name1_id'] if day['name1_id'] else None,
+                living_as_christians_2_id=day['name2_id'] if day['name2_id'] else None,
+            )
+
+            valid = False
+            for key in ['br1']:
+                if day[key]:
+                    valid = True
+
+            if valid:
+                db.session.add(new_schedule)
 
         db.session.commit()
