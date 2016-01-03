@@ -283,7 +283,7 @@ class LoadDb():
             )
 
             valid = False
-            for key in ['br1']:
+            for key in ['br1', 'ic1', 'rv1', 'bs1', 'cbs_conduc', 'chairman', 'prayer1']:
                 if day[key]:
                     valid = True
 
