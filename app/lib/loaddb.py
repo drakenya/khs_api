@@ -10,10 +10,6 @@ from app.outlines.models import Outline
 from app.speakers.models import Speaker
 from app.outgoing.models import Outgoing
 from app.schedule.models import Schedule
-from app.tms.models import Tms
-from app.servicemeeting.models import ServiceMeeting
-from app.biblestudy.models import BibleStudy
-from app.weekly.models import Weekly
 from app.oclm.models import OCLM
 
 from app.fsgroups.khs import KhsDataFsgroups
@@ -24,9 +20,6 @@ from app.outlines.khs import KhsDataOutlines
 from app.speakers.khs import KhsDataSpeakers
 from app.outgoing.khs import KhsDataOutgoing
 from app.schedule.khs import KhsDataSchedule
-from app.tms.khs import KhsDataTms
-from app.servicemeeting.khs import KhsDataServiceMeeting
-from app.biblestudy.khs import KhsDataBibleStudy
 from app.oclm.khs import KhsDataOCLM
 
 
@@ -156,103 +149,6 @@ class LoadDb():
 
             if valid:
                 db.session.add(new_schedule)
-
-        # load tms (schedule)
-        schedule = KhsDataTms(app.config['KHS_DATA_PATH']).get()
-        for day in schedule:
-            new_schedule = Tms(
-                date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
-                bh_id=day['bh_id'] if day['bh_id'] else None,
-                talk_1_id=day['talk1_id'] if day['talk1_id'] else None,
-                talk_2_id=day['talk2_id'] if day['talk2_id'] else None,
-                talk_3_id=day['talk3_id'] if day['talk3_id'] else None,
-                talk_2_assistant_id=day['assist2_id'] if day['assist2_id'] else None,
-                talk_3_assistant_id=day['assist3_id'] if day['assist3_id'] else None,
-                bh_title=day['bh'] if day['bh'] else None,
-                talk_1_title=day['talk1'] if day['talk1'] else None,
-                talk_2_title=day['talk2'] if day['talk2'] else None,
-                talk_3_title=day['talk3'] if day['talk3'] else None,
-                review_reader_id = None,
-            )
-
-            if day['review']:
-                new_schedule.review_reader_id = new_schedule.talk_1_id
-                new_schedule.talk_1_id = None
-
-            valid = False
-            for key in ['bh_id', 'talk1_id', 'talk2_id', 'talk3_id']:
-                if day[key]:
-                    valid = True
-
-            if valid:
-                db.session.add(new_schedule)
-
-        # load servicemeeting (schedule)
-        schedule = KhsDataServiceMeeting(app.config['KHS_DATA_PATH']).get()
-        for day in schedule:
-            new_schedule = ServiceMeeting(
-                date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
-                talk_1_id=day['name_id_1'] if day['name_id_1'] else None,
-                talk_2_id=day['name_id_2'] if day['name_id_2'] else None,
-                talk_3_id=day['name_id_3'] if day['name_id_3'] else None,
-                talk_4_id=day['name_id_4'] if day['name_id_4'] else None,
-                talk_1_title=day['subject1'] if day['subject1'] else None,
-                talk_2_title=day['subject2'] if day['subject2'] else None,
-                talk_3_title=day['subject3'] if day['subject3'] else None,
-                talk_4_title=day['subject4'] if day['subject4'] else None
-            )
-
-            valid = False
-            for key in ['name_id_1', 'name_id_2', 'name_id_3', 'name_id_4']:
-                if day[key]:
-                    valid = True
-
-            if valid:
-                db.session.add(new_schedule)
-
-        # load biblestudy (schedule)
-        schedule = KhsDataBibleStudy(app.config['KHS_DATA_PATH']).get()
-        for day in schedule:
-            new_schedule = BibleStudy(
-                date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
-                conductor_id=day['conductor'] if day['conductor'] else None,
-                reader_id=day['reader'] if day['reader'] else None,
-                title=day['material'] if day['material'] else None
-            )
-
-            valid = False
-            for key in ['conductor', 'reader']:
-                if day[key]:
-                    valid = True
-
-            if valid:
-                db.session.add(new_schedule)
-
-        # load weekly (meta-schedule)
-        meetings = BibleStudy.query.all()
-        for meeting in meetings:
-            new_weekly = Weekly(date=meeting.date)
-            new_weekly.bible_study = meeting
-
-            db.session.add(new_weekly)
-
-        meetings = Tms.query.all()
-        for meeting in meetings:
-            weekly = Weekly.query.filter_by(date=meeting.date).first()
-            if not weekly:
-                weekly = Weekly(date=meeting.date)
-                db.session.add(weekly)
-
-            weekly.tms = meeting
-
-        meetings = ServiceMeeting.query.all()
-        for meeting in meetings:
-            weekly = Weekly.query.filter_by(date=meeting.date).first()
-            if not weekly:
-                weekly = Weekly(date=meeting.date)
-                db.session.add(weekly)
-
-            weekly.service_meeting = meeting
 
         # load OCLM (schedule)
         schedule = KhsDataOCLM(app.config['KHS_DATA_PATH']).get()
