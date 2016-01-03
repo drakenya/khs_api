@@ -23,7 +23,7 @@ class OCLMView(FlaskView):
         results = KhsDataOCLM(app.config['KHS_DATA_PATH']).get()
         return Response(dumps(results, indent=2), mimetype='application/json')
 
-    @route('/khs/<int:id>/')
+    @route('/khs/<string:id>/')
     def khs(self, id):
         results = KhsDataOCLM(app.config['KHS_DATA_PATH']).get(id)
         return Response(dumps(results, indent=2), mimetype='application/json')
