@@ -1,10 +1,11 @@
-from app import app
+from app import app as application
 from config import config_path
 
-app.config.from_object(config_path)
+application.config.from_object(config_path)
 
-app.run(
+if __name__ == "__main__":
+  application.run(
     host='0.0.0.0',
     port=5000,
-    debug=app.config['DEBUG']
-)
+    debug=application.config['DEBUG']
+  )
