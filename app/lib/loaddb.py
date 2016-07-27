@@ -114,11 +114,17 @@ class LoadDb():
         # load outgoing (schedule)
         outgoing = KhsDataOutgoing(app.config['KHS_DATA_PATH']).get()
         for day in outgoing:
+            speaker_name_id = None
+            if day['speaker']:
+                speaker = Speaker.query.filter_by(id=day['speaker']).first()
+                if speaker:
+                    speaker_name_id = speaker.name_id
             new_outgoing = Outgoing(
                 date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
                 outline_id=day['outline'] if day['outline'] else None,
                 speaker_id=day['speaker'] if day['speaker'] else None,
-                congregation_id=day['congregation'] if day['congregation'] else None
+                congregation_id=day['congregation'] if day['congregation'] else None,
+                speaker_name_id=speaker_name_id
             )
 
             valid = False
@@ -132,6 +138,11 @@ class LoadDb():
         # load schedule (schedule)
         schedule = KhsDataSchedule(app.config['KHS_DATA_PATH']).get()
         for day in schedule:
+            speaker_name_id = None
+            if day['speaker_id']:
+                speaker = Speaker.query.filter_by(id=day['speaker_id']).first()
+                if speaker:
+                    speaker_name_id = speaker.name_id
             new_schedule = Schedule(
                 date=datetime.datetime.strptime(day['date'], '%Y-%m-%d').date(),
                 outline_id=day['outline'] if day['outline'] else None,
@@ -140,6 +151,7 @@ class LoadDb():
                 chairman_id=day['chairman'] if day['chairman'] else None,
                 reader_id=day['reader'] if day['reader'] else None,
                 host_id=day['host'] if day['host'] else None,
+                speaker_name_id=speaker_name_id,
             )
 
             valid = False

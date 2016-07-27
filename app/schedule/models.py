@@ -14,6 +14,8 @@ class Schedule(db.Model):
     reader_id = db.Column(db.Integer, db.ForeignKey('names.id'))
     host_id = db.Column(db.Integer, db.ForeignKey('names.id'))
 
+    speaker_name_id = db.Column(db.Integer, db.ForeignKey('names.id'))
+
     outline = db.relationship('Outline')
     speaker = db.relationship('Speaker')
     congregation = db.relationship('Congregation')
@@ -21,7 +23,9 @@ class Schedule(db.Model):
     reader = db.relationship('Name', foreign_keys='Schedule.reader_id')
     host = db.relationship('Name', foreign_keys='Schedule.host_id')
 
-    def __init__(self, date, outline_id, speaker_id, congregation_id, chairman_id, reader_id, host_id, id=None):
+    speaker_name = db.relationship('Name', foreign_keys='Schedule.speaker_name_id')
+
+    def __init__(self, date, outline_id, speaker_id, congregation_id, chairman_id, reader_id, host_id, id=None, speaker_name_id=None):
         self.id = id
 
         self.date = date
@@ -31,3 +35,4 @@ class Schedule(db.Model):
         self.chairman_id = chairman_id
         self.reader_id = reader_id
         self.host_id = host_id
+        self.speaker_name_id = speaker_name_id
